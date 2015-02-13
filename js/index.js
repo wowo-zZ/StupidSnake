@@ -1,11 +1,11 @@
 var c = document.getElementById("a");
 var cc = c.getContext("2d");
-var paleWidth = 500;
-var paleHeight = 375;
+var paleWidth = c.width;
+var paleHeight = c.height;
 
 var food = {
     totalNum:50,
-    concurrenctNum:10,
+    concurrenctNum:1,
     energy:1,
     presetnFoodNum:0,
     foodsLocation:new Array(),
@@ -54,7 +54,7 @@ var snake = {
         snake.body.push(newPart);
         snake.checkCrashSelf();
         snake.checkCrashFood(snake.body[snake.body.length-1]);
-        cc.clearRect(0,0,paleWidth,paleHeight);
+        cc.clearRect(3,3,paleWidth-10,paleHeight-10);
         if(snake.body.length > snake.length){
             snake.body = snake.body.splice(1,snake.length);
         }
@@ -109,6 +109,16 @@ var snake = {
 }
 
 $(window).load(function() {
+    cc.beginPath();
+    cc.fillStyle = "#FFFF00";
+    cc.lineWidth = 4;
+    cc.moveTo(0,0);
+    cc.lineTo(paleWidth-3,0);
+    cc.lineTo(paleWidth-3,paleHeight-3);
+    cc.lineTo(0,paleHeight-3);
+    cc.lineTo(0,0);
+    cc.stroke();
+    cc.closePath();
     var initX = Math.floor(Math.random() * (paleWidth + 1));
     var initY = Math.floor(Math.random() * (paleHeight + 1));
     var initLocation = [initX,initY];
