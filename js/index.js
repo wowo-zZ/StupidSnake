@@ -59,12 +59,26 @@ var snake = {
             snake.body = snake.body.splice(1,snake.length);
         }
         for(i =0 ;i < snake.body.length; i++){
-            snake.paintCycle(snake.body[i],5.6, 3);
+            if(i == snake.body.length - 1){
+                snake.paintCycle(snake.body[i],3, 5);
+            }else {
+                snake.paintCycle(snake.body[i],5.6, 3);
+            }
         }
         snake.paintCycle(food.foodsLocation,5.6, 3);
     },
     checkCrashSelf:function(){
-        
+        var die = false;
+        for(i = 0; i < snake.body.length - 1; i++){
+            for(j = i + 1; j < snake.body.length; j++){
+                if(snake.body[i][0] == snake.body[j][0] && snake.body[i][1] == snake.body[j][1]){
+                    die = true;
+                }
+            }
+        }
+        if(die){
+            snake.die();
+        }
     },
     checkCrashFood:function(headLocation){
         for(i =0 ;i < food.foodsLocation.length; i++){
@@ -82,15 +96,23 @@ var snake = {
     changeHead:function(){
         if(event.keyCode == 37 && snake.head != 3){
             snake.head = 2;
+            snake.move();
         }else if(event.keyCode == 38 && snake.head != 1){
             snake.head = 0;
+            snake.move();
         }else if(event.keyCode == 39 && snake.head != 2){
             snake.head = 3;
+            snake.move();
         }else if(event.keyCode == 40 && snake.head != 0){
             snake.head = 1;
+            snake.move();
         }
     },
-    
+    //蛇挂了
+    die:function(){
+        alert("You die!");
+        clearInterval(snake.moveTimer);
+    },
     //画个圆，蛇身体的一部分
     paintCycle: function(location, lineWidth, radius) {
         if(location[0] instanceof Array === true){
@@ -123,7 +145,7 @@ $(window).load(function() {
     var initY = Math.floor(Math.random() * (paleHeight + 1));
     var initLocation = [initX,initY];
     snake.body.push(initLocation);
-    snake.paintCycle(initLocation, 5.6, 3);
+    snake.paintCycle(initLocation, 3, 5);
     snake.moveTimer = setInterval(snake.move, 600);
     document.onkeydown = snake.changeHead;
 })
