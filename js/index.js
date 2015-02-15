@@ -1,8 +1,12 @@
 var c = document.getElementById("a");
 var cc = c.getContext("2d");
-var paleWidth = c.width;
-var paleHeight = c.height;
-
+var global = {
+    browserType:"PCBrowser",
+    paleWidth:500,
+    paleHeight:680,
+    radius:3,
+    lineWidth:5.6,
+}
 var food = {
     totalNum:50,
     concurrenctNum:1,
@@ -12,7 +16,7 @@ var food = {
     createFood:function(){
         if(food.presetnFoodNum <= 0){
             for(i = 0; i < food.concurrenctNum; i++){
-                food.foodsLocation[i] = [Math.floor(Math.random() * (paleWidth + 1)),Math.floor(Math.random() * (paleHeight + 1))];
+                food.foodsLocation[i] = [Math.floor(Math.random() * (global.paleWidth + 1)),Math.floor(Math.random() * (global.paleHeight + 1))];
                 food.presetnFoodNum ++;
             }
         }
@@ -33,28 +37,28 @@ var snake = {
             case 0:
                 var newPart = [snake.body[snake.body.length-1][0],snake.body[snake.body.length-1][1]-11];
                 if(newPart[1] < 0)
-                    newPart[1] += paleHeight;
+                    newPart[1] += global.paleHeight;
                 break;
             case 1:
                 var newPart = [snake.body[snake.body.length-1][0],snake.body[snake.body.length-1][1]+11];
-                if(newPart[1] > paleHeight)
-                    newPart[1] -= paleHeight;
+                if(newPart[1] > global.paleHeight)
+                    newPart[1] -= global.paleHeight;
                 break;
             case 2:
                 var newPart = [snake.body[snake.body.length-1][0]-11,snake.body[snake.body.length-1][1]];
                 if(newPart[0] < 0)
-                    newPart[0] += paleWidth;
+                    newPart[0] += global.paleWidth;
                 break;
             case 3:
                 var newPart = [snake.body[snake.body.length-1][0]+11,snake.body[snake.body.length-1][1]];
-                if(newPart[0] > paleWidth)
-                    newPart[0] -= paleWidth;
+                if(newPart[0] > global.paleWidth)
+                    newPart[0] -= global.paleWidth;
                 break;
         }
         snake.body.push(newPart);
         snake.checkCrashSelf();
         snake.checkCrashFood(snake.body[snake.body.length-1]);
-        cc.clearRect(3,3,paleWidth-10,paleHeight-10);
+        cc.clearRect(3,3,global.paleWidth-10,global.paleHeight-10);
         if(snake.body.length > snake.length){
             snake.body = snake.body.splice(1,snake.length);
         }
@@ -117,37 +121,51 @@ var snake = {
     paintCycle: function(location, lineWidth, radius) {
         if(location[0] instanceof Array === true){
             for(i = 0; i < location.length; i++){
-                snake.paintCycle(location[i], lineWidth, radius);
+                snake.paintCycle(location[i], lineWidth, global.radius);
             }
             return ;
         }
         cc.beginPath();
-        cc.fillStyle = "#FFFFFF";
+        cc.arc(location[0], location[1], global.radius, 0, 360, false);
+        cc.fillStyle = "red";
         cc.lineWidth = lineWidth;
-        cc.arc(location[0], location[1], radius, 0, Math.PI * 2, true);
-        cc.stroke();    
+        cc.fill();    
         cc.closePath();
     }
 }
 
 $(window).load(function() {
+    global.browserType = checkBrowser();
+    if(global.browserType == "appBrowser"){
+        c.width = 960;
+        c.height = 1305;
+        global.paleWidth = 960;
+        global.paleHeight = 1305;
+        global.radius = 10;
+        global.lineWidth = 20;
+    }
     cc.beginPath();
     cc.fillStyle = "#FFFF00";
     cc.lineWidth = 4;
     cc.moveTo(0,0);
-    cc.lineTo(paleWidth-3,0);
-    cc.lineTo(paleWidth-3,paleHeight-3);
-    cc.lineTo(0,paleHeight-3);
+    cc.lineTo(global.paleWidth-3,0);
+    cc.lineTo(global.paleWidth-3,global.paleHeight-3);
+    cc.lineTo(0,global.paleHeight-3);
     cc.lineTo(0,0);
     cc.stroke();
     cc.closePath();
-    var initX = Math.floor(Math.random() * (paleWidth + 1));
-    var initY = Math.floor(Math.random() * (paleHeight + 1));
+    var initX = Math.floor(Math.random() * (global.paleWidth + 1));
+    var initY = Math.floor(Math.random() * (global.paleHeight + 1));
     var initLocation = [initX,initY];
     snake.body.push(initLocation);
     snake.paintCycle(initLocation, 3, 5);
     snake.moveTimer = setInterval(snake.move, 600);
-    document.onkeydown = snake.changeHead;
+    if(global.browserType == "PCBrowser"){
+        document.onkeydown = snake.changeHead;
+    }else if(global.browserType == "appBrowser"){
+        
+    }
+    
 })
 
 
