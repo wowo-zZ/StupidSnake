@@ -61,6 +61,7 @@ var snake = {
         snake.checkCrashSelf();
         snake.checkCrashFood(snake.body[snake.body.length - 1]);
         cc.clearRect(3, 3, global.paleWidth - 10, global.paleHeight - 10);
+        //从第二个位置开始截取新蛇的body
         if (snake.body.length > snake.length) {
             snake.body = snake.body.splice(1, snake.length);
         }
@@ -165,8 +166,8 @@ $(window).load(function() {
     var initY = Math.floor(Math.random() * (global.paleHeight + 1)) / 3 * 3;
     var initLocation = [initX, initY];
     snake.body.push(initLocation);
-    //snake.paintCycle(initLocation, 3, 5);
-    snake.moveTimer = setInterval(snake.move, 600);
+    snake.paintCycle(initLocation, global.lineWidth, global.radius);
+    //snake.moveTimer = setInterval(snake.move, 600);
     if (global.browserType == "PCBrowser") {
         document.onkeydown = snake.changeHead;
     } else if (global.browserType == "appBrowser") {
@@ -189,7 +190,7 @@ function isTouchDevice() {
 function bindEvent() {
     document.addEventListener('touchstart', touchSatrtFunc, false);
     document.addEventListener('touchmove', touchMoveFunc, false);
-    document.addEventListener('touchend', touchEndFunc, false);
+    //document.addEventListener('touchend', touchEndFunc, false);
 }
 //全局变量，触摸开始位置
 var startX = 0, startY = 0;
