@@ -6,7 +6,8 @@ var global = {
     paleHeight: 680,
     radius: 10,
     lineWidth: 5.6,
-    step: 15,
+    step: 18,
+    pricise:36,
 }
 var food = {
     totalNum: 50,
@@ -18,7 +19,7 @@ var food = {
     createFood: function() {
         if (food.presetnFoodNum <= 0) {
             for (i = 0; i < food.concurrenctNum; i++) {
-                food.foodsLocation[i] = [Math.floor(Math.random() * (global.paleWidth + 1)) / 3 * 3, Math.floor(Math.random() * (global.paleHeight + 1)) / 3 * 3];
+                food.foodsLocation[i] = [Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise) * global.pricise, Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise) * global.pricise];
                 food.presetnFoodNum++;
             }
         }
@@ -161,9 +162,10 @@ $(window).load(function() {
     cc.lineTo(0, 0);
     cc.stroke();
     cc.closePath();
-    var initX = Math.floor(Math.random() * (global.paleWidth + 1)) / 3 * 3;
-    var initY = Math.floor(Math.random() * (global.paleHeight + 1)) / 3 * 3;
+    var initX = Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise )* global.pricise;
+    var initY = Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise )* global.pricise;
     var initLocation = [initX, initY];
+    alert(initLocation);
     snake.body.push(initLocation);
     //snake.paintCycle(initLocation, 3, 5);
     snake.moveTimer = setInterval(snake.move, 600);
