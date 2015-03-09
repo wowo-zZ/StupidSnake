@@ -2,8 +2,8 @@ var c = document.getElementById("a");
 var cc = c.getContext("2d");
 var global = {
     browserType: "PCBrowser",
-    paleWidth: 500,
-    paleHeight: 680,
+    paleWidth: 486,
+    paleHeight: 666,
     radius: 10,
     lineWidth: 5.6,
     step: 18,
@@ -21,8 +21,8 @@ var food = {
             for (i = 0; i < food.concurrenctNum; i++) {
                 //不同的食物，添加不同的类型，有不同的效果
                 food.foodsLocation[i] = [Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise) * global.pricise,
-                                         Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise) * global.pricise,
-                                         type];
+                                         Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise) * global.pricise
+                                         ];
                 food.presetnFoodNum++;
             }
         }
