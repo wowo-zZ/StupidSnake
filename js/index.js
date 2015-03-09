@@ -6,7 +6,8 @@ var global = {
     paleHeight: 680,
     radius: 10,
     lineWidth: 5.6,
-    step: 15,
+    step: 18,
+    pricise:36,
 }
 var food = {
     totalNum: 50,
@@ -18,7 +19,10 @@ var food = {
     createFood: function() {
         if (food.presetnFoodNum <= 0) {
             for (i = 0; i < food.concurrenctNum; i++) {
-                food.foodsLocation[i] = [Math.floor(Math.random() * (global.paleWidth + 1)) / 3 * 3, Math.floor(Math.random() * (global.paleHeight + 1)) / 3 * 3];
+                //不同的食物，添加不同的类型，有不同的效果
+                food.foodsLocation[i] = [Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise) * global.pricise,
+                                         Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise) * global.pricise,
+                                         type];
                 food.presetnFoodNum++;
             }
         }
@@ -161,9 +165,10 @@ $(window).load(function() {
     cc.lineTo(0, 0);
     cc.stroke();
     cc.closePath();
-    var initX = Math.floor(Math.random() * (global.paleWidth + 1)) / 3 * 3;
-    var initY = Math.floor(Math.random() * (global.paleHeight + 1)) / 3 * 3;
+    var initX = Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise )* global.pricise;
+    var initY = Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise )* global.pricise;
     var initLocation = [initX, initY];
+    alert(initLocation);
     snake.body.push(initLocation);
     //snake.paintCycle(initLocation, 3, 5);
     snake.moveTimer = setInterval(snake.move, 600);
@@ -191,22 +196,18 @@ function bindEvent() {
     document.addEventListener('touchmove', touchMoveFunc, false);
     document.addEventListener('touchend', touchEndFunc, false);
 }
-//全局变量，触摸开始位置
-var startX = 0, startY = 0;
 
 //touchstart事件
 function touchSatrtFunc(evt) {
     try
     {
         //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
-
         var touch = evt.touches[0]; //获取第一个触点
         var x = Number(touch.pageX); //页面触点X坐标
         var y = Number(touch.pageY); //页面触点Y坐标
         //记录触点初始位置
         startX = x;
         startY = y;
-
         var text = 'TouchStart事件触发：（' + x + ', ' + y + '）';
     }
     catch (e) {
