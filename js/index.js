@@ -19,7 +19,10 @@ var food = {
     createFood: function() {
         if (food.presetnFoodNum <= 0) {
             for (i = 0; i < food.concurrenctNum; i++) {
-                food.foodsLocation[i] = [Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise) * global.pricise, Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise) * global.pricise];
+                //不同的食物，添加不同的类型，有不同的效果
+                food.foodsLocation[i] = [Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise) * global.pricise,
+                                         Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise) * global.pricise,
+                                         type];
                 food.presetnFoodNum++;
             }
         }
