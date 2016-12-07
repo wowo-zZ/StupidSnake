@@ -1,4 +1,4 @@
-var c = document.getElementById("a");
+var c = document.getElementById("content");
 var cc = c.getContext("2d");
 var global = {
     browserType: "PCBrowser",
@@ -7,27 +7,27 @@ var global = {
     radius: 10,
     lineWidth: 5.6,
     step: 18,
-    pricise:36,
-}
+    precise: 36
+};
 var food = {
     totalNum: 50,
-    concurrenctNum: 1,
+    concurrentNum: 1,
     energy: 1,
-    presetnFoodNum: 0,
+    presentFoodNum: 0,
     foodsLocation: new Array(),
     //创建食物
-    createFood: function() {
-        if (food.presetnFoodNum <= 0) {
-            for (i = 0; i < food.concurrenctNum; i++) {
+    createFood: function () {
+        if (food.presentFoodNum <= 0) {
+            for (i = 0; i < food.concurrentNum; i++) {
                 //不同的食物，添加不同的类型，有不同的效果
-                food.foodsLocation[i] = [Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise) * global.pricise,
-                                         Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise) * global.pricise
-                                         ];
-                food.presetnFoodNum++;
+                food.foodsLocation[i] = [Math.floor((Math.random() * (global.paleWidth + 1)) / global.precise) * global.precise,
+                    Math.floor((Math.random() * (global.paleHeight + 1)) / global.precise) * global.precise
+                ];
+                food.presentFoodNum++;
             }
         }
-    },
-}
+    }
+};
 
 var snake = {
     body: new Array(), //蛇身
@@ -37,7 +37,7 @@ var snake = {
 
     moveTimer: null,
     //重绘蛇身
-    move: function() {
+    move: function () {
         food.createFood();
         switch (snake.head) {
             case 0:
@@ -68,7 +68,7 @@ var snake = {
         if (snake.body.length > snake.length) {
             snake.body = snake.body.splice(1, snake.length);
         }
-        for (i = 0; i < snake.body.length; i++) {
+        for (var i = 0; i < snake.body.length; i++) {
             if (i == snake.body.length - 1) {
                 snake.paintCycle(snake.body[i], 3, 5);
             } else {
@@ -78,10 +78,10 @@ var snake = {
         snake.paintCycle(food.foodsLocation, 5.6, 3);
     },
     //检测撞自己
-    checkCrashSelf: function() {
+    checkCrashSelf: function () {
         var die = false;
-        for (i = 0; i < snake.body.length - 1; i++) {
-            for (j = i + 1; j < snake.body.length; j++) {
+        for (var i = 0; i < snake.body.length - 1; i++) {
+            for (var j = i + 1; j < snake.body.length; j++) {
                 if (snake.body[i][0] == snake.body[j][0] && snake.body[i][1] == snake.body[j][1]) {
                     die = true;
                 }
@@ -92,20 +92,20 @@ var snake = {
         }
     },
     //检测碰到食物
-    checkCrashFood: function(headLocation) {
-        for (i = 0; i < food.foodsLocation.length; i++) {
+    checkCrashFood: function (headLocation) {
+        for (var i = 0; i < food.foodsLocation.length; i++) {
             var x = Math.abs(food.foodsLocation[i][0] - headLocation[0]);
             var y = Math.abs(food.foodsLocation[i][1] - headLocation[1]);
             if (x <= 10 && y <= 10) {
                 snake.length++;
                 food.foodsLocation.splice(i, 1);
-                food.presetnFoodNum--;
+                food.presentFoodNum--;
             }
         }
         //snake.length ++;
     },
     //更改方向
-    changeHead: function() {
+    changeHead: function () {
         if (event.keyCode == 37 && snake.head != 3) {
             snake.head = 2;
             snake.move();
@@ -120,14 +120,14 @@ var snake = {
             snake.move();
         }
     },
-    
+
     //蛇挂了
-    die: function() {
+    die: function () {
         alert("You die!");
         clearInterval(snake.moveTimer);
     },
     //画个圆，蛇身体的一部分
-    paintCycle: function(location, lineWidth, radius) {
+    paintCycle: function (location, lineWidth, radius) {
         if (location[0] instanceof Array === true) {
             for (i = 0; i < location.length; i++) {
                 snake.paintCycle(location[i], lineWidth, global.radius);
@@ -140,9 +140,9 @@ var snake = {
         cc.fill();
         cc.closePath();
     }
-}
+};
 
-$(window).load(function() {
+$(window).load(function () {
     global.browserType = checkBrowser();
     c.width = global.paleWidth;
     c.height = global.paleHeight;
@@ -165,8 +165,8 @@ $(window).load(function() {
     cc.lineTo(0, 0);
     cc.stroke();
     cc.closePath();
-    var initX = Math.floor((Math.random() * (global.paleWidth + 1)) / global.pricise )* global.pricise;
-    var initY = Math.floor((Math.random() * (global.paleHeight + 1)) / global.pricise )* global.pricise;
+    var initX = Math.floor((Math.random() * (global.paleWidth + 1)) / global.precise) * global.precise;
+    var initY = Math.floor((Math.random() * (global.paleHeight + 1)) / global.precise) * global.precise;
     var initLocation = [initX, initY];
     alert(initLocation);
     snake.body.push(initLocation);
@@ -178,7 +178,7 @@ $(window).load(function() {
         isTouchDevice();
     }
 
-})
+});
 
 //判断是否支持触摸事件
 function isTouchDevice() {
@@ -192,15 +192,14 @@ function isTouchDevice() {
 }
 //绑定事件
 function bindEvent() {
-    document.addEventListener('touchstart', touchSatrtFunc, false);
+    document.addEventListener('touchstart', touchStartFunc, false);
     document.addEventListener('touchmove', touchMoveFunc, false);
     document.addEventListener('touchend', touchEndFunc, false);
 }
 
 //touchstart事件
-function touchSatrtFunc(evt) {
-    try
-    {
+function touchStartFunc(evt) {
+    try {
         //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
         var touch = evt.touches[0]; //获取第一个触点
         var x = Number(touch.pageX); //页面触点X坐标
@@ -211,14 +210,13 @@ function touchSatrtFunc(evt) {
         var text = 'TouchStart事件触发：（' + x + ', ' + y + '）';
     }
     catch (e) {
-        alert('touchSatrtFunc：' + e.message);
+        alert('touchStartFunc：' + e.message);
     }
 }
 
 //touchmove事件，这个事件无法获取坐标
 function touchMoveFunc(evt) {
-    try
-    {
+    try {
         //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
         var touch = evt.touches[0]; //获取第一个触点
         var x = Number(touch.pageX); //页面触点X坐标
@@ -227,13 +225,13 @@ function touchMoveFunc(evt) {
         var text = 'TouchMove事件触发：（' + x + ', ' + y + '）';
         text += 'TouchStart事件触发：（' + startX + ', ' + startY + '）';
         //判断滑动方向 前进方向：0-上，1-下，2-左，3-右
-        if ((x - startX > 0 && y - startY > 0 )||(x - startX > 0 && y - startY < 0 ) && (Math.abs(x - startX) >= Math.abs(y - startY)) && snake.head != 2) {
+        if ((x - startX > 0 && y - startY > 0 ) || (x - startX > 0 && y - startY < 0 ) && (Math.abs(x - startX) >= Math.abs(y - startY)) && snake.head != 2) {
             snake.head = 3;
-        }else if ((x - startX > 0 && y - startY < 0 )||(x - startX < 0 && y - startY < 0 ) && (Math.abs(x - startX) <= Math.abs(y - startY)) && snake.head != 1) {
+        } else if ((x - startX > 0 && y - startY < 0 ) || (x - startX < 0 && y - startY < 0 ) && (Math.abs(x - startX) <= Math.abs(y - startY)) && snake.head != 1) {
             snake.head = 0;
-        }else if ((x - startX < 0 && y - startY < 0 )||(x - startX < 0 && y - startY > 0 ) && (Math.abs(x - startX) >= Math.abs(y - startY)) && snake.head != 3) {
+        } else if ((x - startX < 0 && y - startY < 0 ) || (x - startX < 0 && y - startY > 0 ) && (Math.abs(x - startX) >= Math.abs(y - startY)) && snake.head != 3) {
             snake.head = 2;
-        }else if ((x - startX > 0 && y - startY > 0 )||(x - startX < 0 && y - startY > 0 ) && (Math.abs(x - startX) <= Math.abs(y - startY)) && snake.head != 0) {
+        } else if ((x - startX > 0 && y - startY > 0 ) || (x - startX < 0 && y - startY > 0 ) && (Math.abs(x - startX) <= Math.abs(y - startY)) && snake.head != 0) {
             snake.head = 1;
         }
     }
